@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Report {
+  id           String   @id @default(uuid())
+  fileName     String
+  filePath     String?
+  status       String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
+  dataSnapshot Json?    // to set summarize dataSnapshot
+  aiAnalysis   String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+}
