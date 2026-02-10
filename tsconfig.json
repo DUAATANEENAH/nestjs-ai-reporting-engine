@@ -16,6 +16,14 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+   "paths": {
+      "@providers/*": ["src/providers/*"],
+      "@providers": ["src/providers"], 
+      
+    "@reports/*": ["src/modules/reports/*"],
+    "@reports": ["src/modules/reports/index"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
 }
