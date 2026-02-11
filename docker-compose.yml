@@ -22,6 +22,23 @@ services:
     restart: always
     ports:
       - "6379:6379"
+# (Prisma Studio) to access the database and manage data visually
+  prisma-studio:
+    image: node:22-slim
+    container_name: prisma_studio_container
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      sh -c "apt-get update -y && apt-get install -y openssl && npx prisma studio --config=./prisma/prisma.config.ts --url="postgresql://user_admin:password123@postgres:5432/reporting_db?schema=public" --browser none --port 5555"
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      - postgres
 
 volumes:
   postgres_data:

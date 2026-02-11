@@ -17,4 +17,16 @@ model Report {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  reportData   ReportData[]
+}
+
+model ReportData {
+  id        String   @id @default(uuid())
+  reportId  String
+  type      String   // "USERS", "SALES", "INVENTORY"
+  content   Json     // ROW DATA 
+  email     String?  // ROW TO EXTRA TO SEARCH
+  createdAt DateTime @default(now())
+  
+  report    Report   @relation(fields: [reportId], references: [id])
 }

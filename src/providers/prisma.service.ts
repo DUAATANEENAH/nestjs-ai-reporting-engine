@@ -8,21 +8,25 @@ import { Pool } from "pg";
 export interface IPrismaService {
   addReport(report: { fileName: string; filePath: string; status: string; }): Promise<any>;
   updateReportIdStatus(reportId: string, status: string): Promise<any>;
+  createReportData(data: any[]): Promise<any>;
 }
 
 @Injectable()
-export class PrismaService extends PrismaClient implements IPrismaService, OnModuleInit,OnModuleDestroy {
+export class PrismaService extends PrismaClient implements IPrismaService, OnModuleInit, OnModuleDestroy {
+  
   constructor(private config: ConfigService) {
+
     const connectionString = config.get<string>('global.DATABASE_URL');
     if (!connectionString) {
       throw new Error('DATABASE_URL is not defined in .env file');
     }
-    const pool = new Pool({ connectionString,
+    const pool = new Pool({
+      connectionString,
       max: 20,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 2000,
     });
-    
+
     const adapter = new PrismaPg(pool);
 
     super({ adapter });
@@ -48,5 +52,10 @@ export class PrismaService extends PrismaClient implements IPrismaService, OnMod
       data: { status },
     });
   }
+
+  public async createReportData(data: any[]): Promise<any> {
+    return await this.reportData.createMany({ data });
+  }
+
 
 }
