@@ -1,3 +1,3 @@
 export enum ReportQueueNameDefault {
-    REPORTING_QUEUE = 'report-queue'
+	REPORTING_QUEUE = 'report-queue',
 }

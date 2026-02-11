@@ -18,11 +18,12 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
    "paths": {
-      "@providers/*": ["src/providers/*"],
-      "@providers": ["src/providers"], 
-      
+    "@providers/*": ["src/providers/*"],
+    "@providers": ["src/providers"], 
     "@reports/*": ["src/modules/reports/*"],
-    "@reports": ["src/modules/reports/index"]
+    "@reports": ["src/modules/reports"],
+    "@common/*": ["src/common/*"],
+    "@common": ["src/common"]
     }
   },
   "exclude": ["node_modules", "dist"]
