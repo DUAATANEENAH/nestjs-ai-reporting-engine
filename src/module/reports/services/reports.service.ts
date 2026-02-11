@@ -1,13 +1,14 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { InjectQueue } from "@nestjs/bullmq";
 import { Queue } from "bullmq";
-import { ReportJobNames, ReportQueueNameDefault, ReportStatus } from "../enum";
+import { ReportJobNames, ReportQueueNameDefault, ReportTypes } from "../enum";
 import { IPrismaService } from "@providers";
+import { ReportStatus } from "../enum/reportStatus.enum";
 
 
 const REPORTING_QUEUE = `{${process.env.REPORTING_QUEUE || ReportQueueNameDefault.REPORTING_QUEUE}}`;
 export interface IReportsService {
-    setEnqueueReportGeneration(File: Express.Multer.File): Promise<Record<string, any>>;
+    setEnqueueReportGeneration(File: Express.Multer.File, type: ReportTypes): Promise<Record<string, any>>;
 }
 @Injectable()
 export class ReportsService {
@@ -16,7 +17,7 @@ export class ReportsService {
         @InjectQueue(REPORTING_QUEUE) public reportingQueue: Queue,
     ) { }
 
-    async enqueueReportGeneration(File: Express.Multer.File): Promise<Record<string, any>> {
+    async enqueueReportGeneration(File: Express.Multer.File, type: ReportTypes): Promise<Record<string, any>> {
         try {
             const report = await this.prismaService.addReport({
                 fileName: File.originalname,
@@ -27,6 +28,7 @@ export class ReportsService {
             await this.reportingQueue.add(ReportJobNames.PROCESS_CSV, {
                 reportId: report.id,
                 filePath: File.path,
+                type: type,
             });
 
             return {

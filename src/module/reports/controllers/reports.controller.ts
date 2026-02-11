@@ -1,7 +1,8 @@
-import { Controller, Inject, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Controller, Inject, Param, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { ReportsService } from "../services";
+import { ReportTypes } from "../enum";
 
 @Controller('reports')
 export class ReportsController {
@@ -11,7 +12,7 @@ export class ReportsController {
     ) { }
 
 
-    @Post('upload')
+    @Post('upload/:type')
     @UseInterceptors(FileInterceptor('file', {
         storage: diskStorage({
             destination: './uploads',
@@ -23,9 +24,9 @@ export class ReportsController {
             }
         })
     }))
-    async uploadReport(@UploadedFile() file: Express.Multer.File) {
+    async uploadReport(@Param('type') type: ReportTypes, @UploadedFile() file: Express.Multer.File) {
         try {
-            return await this.reportsService.enqueueReportGeneration(file);
+            return await this.reportsService.enqueueReportGeneration(file, type);
 
         } catch (error) {
             console.error('Error uploading report:', error);
