@@ -7,6 +7,7 @@ import { PrismaService } from '@providers';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import globalConfig from '../../../config/global';
 import { ReportsProcessor } from './processors';
+import { ReportsGateway } from './notification';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -36,6 +37,10 @@ import { ReportsProcessor } from './processors';
 		{
 			provide: 'ReportsProcessor',
 			useClass: ReportsProcessor,
+		},
+		{
+			provide: 'ReportsGateway',
+			useClass: ReportsGateway,
 		},
 	],
 	exports: [
