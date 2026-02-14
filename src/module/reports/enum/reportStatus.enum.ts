@@ -1,6 +1,7 @@
 export enum ReportStatus {
 	PENDING = 'PENDING',
 	IN_PROGRESS = 'IN_PROGRESS',
+	AI_ANALYSIS = 'AI_ANALYSIS',
 	COMPLETED = 'COMPLETED',
 	FAILED = 'FAILED',
 }

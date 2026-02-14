@@ -8,6 +8,8 @@ export interface IPrismaService {
 	addReport(report: { fileName: string; filePath: string; status: string }): Promise<any>;
 	updateReportIdStatus(reportId: string, status: string): Promise<any>;
 	createReportData(data: any[]): Promise<any>;
+	updateReport(reportId: string, updateData: any): Promise<any>;
+	getReadySample(reportId: string): Promise<{ dataType: string; sample: any[] }>;
 }
 
 @Injectable()
@@ -44,6 +46,13 @@ export class PrismaService extends PrismaClient implements IPrismaService, OnMod
 		});
 	}
 
+	public async updateReport(reportId: string, updateData: any): Promise<any> {
+		return await this.report.update({
+			where: { id: reportId },
+			data: { ...updateData },
+		});
+	}
+
 	public async updateReportIdStatus(reportId: string, status: string) {
 		return await this.report.update({
 			where: { id: reportId },
@@ -53,6 +62,21 @@ export class PrismaService extends PrismaClient implements IPrismaService, OnMod
 
 	public async createReportData(data: any[]): Promise<any> {
 		return await this.reportData.createMany({ data });
+	}
+
+	public async getReadySample(reportId: string): Promise<{ dataType: string; sample: any[] }> {
+		const rawRows = await this.reportData.findMany({
+			where: { reportId },
+			take: 10,
+			select: {
+				content: true, type: true,
+
+			},
+		});
+		return {
+			dataType: rawRows[0]?.type || 'UNKNOWN',
+			sample: rawRows.map(row => row.content),
+		};
 	}
 
 }

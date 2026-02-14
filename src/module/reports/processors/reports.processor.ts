@@ -8,6 +8,7 @@ import * as csvParser from 'csv-parser';
 import { ReportMappers } from '../utils';
 import * as fs from 'fs';
 import { ReportsGateway } from '../notification';
+import { IAIService } from '../services';
 
 export interface IReportsProcessor {
 	process(job: Job<any, any, string>): Promise<any>;
@@ -18,8 +19,9 @@ export class ReportsProcessor extends WorkerHost implements IReportsProcessor {
 	private logger;
 
 	constructor(@Inject('PrismaService') private readonly prisma: PrismaService,
-	@Inject('ReportsGateway') private readonly reportsGateway: ReportsGateway,
-) {
+		@Inject('ReportsGateway') private readonly reportsGateway: ReportsGateway,
+		@Inject('AIService') private readonly aiService: IAIService,
+	) {
 		super();
 		this.logger = new Logger('ReportsProcessor');
 	}
@@ -43,6 +45,7 @@ export class ReportsProcessor extends WorkerHost implements IReportsProcessor {
 					// handle CSV processing logic
 					this.logger.log(`handle CSV processing for report ID: ${reportId}`);
 					await this.handleCSVReportGeneration(job);
+					await this.handleAIReportGeneration(job);
 					break;
 				default:
 					this.logger.warn(`Unknown job name: ${job.name} for report ID: ${reportId}`);
@@ -83,7 +86,7 @@ export class ReportsProcessor extends WorkerHost implements IReportsProcessor {
 						type,
 					});
 					if (batch.length >= bachSize) {
-						progress = Math.round((rowNumber/ totalRows) * 100);
+						progress = Math.round((rowNumber / totalRows) * 90);
 						this.reportsGateway.sendUpdate(reportId, { status: 'in_progress', progress, message: `Processing batch of ${batch.length} records` });
 						await this.prisma.createReportData(batch);
 						stream.pause();
@@ -93,7 +96,7 @@ export class ReportsProcessor extends WorkerHost implements IReportsProcessor {
 				});
 				stream.on('end', async () => {
 					if (batch.length > 0) {
-						this.reportsGateway.sendUpdate(reportId, { status: 'in_progress', progress: 100, message: `Processing final batch of ${batch.length} records` });
+						this.reportsGateway.sendUpdate(reportId, { status: 'in_progress', progress: 90, message: `Processing final batch of ${batch.length} records` });
 						await this.prisma.createReportData(batch);
 					}
 					resolve(true);
@@ -110,5 +113,31 @@ export class ReportsProcessor extends WorkerHost implements IReportsProcessor {
 			throw error; // Rethrow to be caught by the main process method
 		}
 
+	}
+
+	private async handleAIReportGeneration(job: Job<any, any, string>) {
+		const { reportId, filePath } = job.data;
+		try {
+			this.reportsGateway.sendUpdate(reportId, { status: 'in_progress', progress: 92, message: 'AI analysis started' });
+			this.logger.log(`Processing AI report generation for report ID: ${reportId}, file path: ${filePath}`);
+			await this.prisma.updateReportIdStatus(reportId, ReportStatus.AI_ANALYSIS);
+
+			// Read and summarize data from the file (this is a placeholder, implement your own logic to summarize the data)
+			const summaryData = await this.prisma.getReadySample(reportId);
+
+			// Use AI service to analyze the summarized data
+			const aiReport = await this.aiService.analyzeDataWithAI(summaryData);
+			console.log('Type of aiReport:', typeof aiReport);
+
+			// Save the AI-generated report data to the database
+			await this.prisma.updateReport(reportId, {
+				aiAnalysis: { ...aiReport },
+			});
+			this.reportsGateway.sendUpdate(reportId, { status: 'completed', progress: 100, message: 'AI analysis completed' });
+		} catch (error) {
+			this.reportsGateway.sendUpdate(reportId, { status: 'failed', progress: 92, message: 'AI analysis failed' });
+			this.logger.error(`Error in handleAIReportGeneration for report ID: ${job.data.reportId}`, error);
+			throw error; // Rethrow to be caught by the main process method
+		}
 	}
 }
