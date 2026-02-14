@@ -1,6 +1,7 @@
 import {
 	Controller,
 	Inject,
+	Logger,
 	Param,
 	Post,
 	UploadedFile,
@@ -19,15 +20,18 @@ import {
 import { diskStorage } from 'multer';
 import { ValidationPipe } from '@common';
 import { ReportTypes } from '../enum';
-import { UploadedFileValidation } from '../dto/uploadFileValidation';
+import { UploadedFileValidation } from '../validation-schema/uploadFileValidation';
 import { ReportsService } from '../services';
 
 @ApiTags('reports')
 @Controller('reports')
 export class ReportsController {
+	private logger;
 	constructor(
 		@Inject('ReportsService') private reportsService: ReportsService,
-	) {}
+	) {
+		this.logger = new Logger('ReportsController');
+	}
 
 	@Post('upload/:type')
 	@ApiOperation({ summary: 'Upload a report file and enqueue processing' })
@@ -89,7 +93,7 @@ export class ReportsController {
 				param?.type,
 			);
 		} catch (error) {
-			console.error('Error uploading report:', error);
+			this.logger.error('Error uploading report:', error);
 			throw new Error('Failed to upload report');
 		}
 	}

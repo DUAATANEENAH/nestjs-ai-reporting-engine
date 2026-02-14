@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { ReportJobNames, ReportQueueNameDefault, ReportTypes } from '../enum';
@@ -16,10 +16,13 @@ export interface IReportsService {
 }
 @Injectable()
 export class ReportsService {
+	private logger;
 	constructor(
 		@Inject('PrismaService') private prismaService: IPrismaService,
 		@InjectQueue(REPORTING_QUEUE) public reportingQueue: Queue,
-	) {}
+	) {
+		this.logger = new Logger('ReportsService');
+	}
 
 	async enqueueReportGeneration(
 		File: Express.Multer.File,
@@ -44,7 +47,7 @@ export class ReportsService {
 				filePath: File.path,
 			};
 		} catch (error) {
-			console.error('Error enqueuing report generation:', error);
+			this.logger.error('Error enqueuing report generation:', error);
 			throw new Error('Failed to enqueue report generation');
 		}
 	}
