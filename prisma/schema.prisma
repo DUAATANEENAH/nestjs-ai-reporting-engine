@@ -12,8 +12,7 @@ model Report {
   fileName     String
   filePath     String?
   status       String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
-  dataSnapshot Json?    // to set summarize dataSnapshot
-  aiAnalysis   String?  @db.Text
+  aiAnalysis   Json?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 

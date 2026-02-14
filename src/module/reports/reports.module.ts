@@ -1,6 +1,6 @@
 import { BullModule } from '@nestjs/bullmq';
 import { ReportsController } from './controllers';
-import { ReportsService } from './services';
+import { AIService, ReportsService } from './services';
 import { Module } from '@nestjs/common';
 import { ReportQueueNameDefault } from './enum';
 import { PrismaService } from '@providers';
@@ -41,6 +41,10 @@ import { ReportsGateway } from './notification';
 		{
 			provide: 'ReportsGateway',
 			useClass: ReportsGateway,
+		},
+		{
+			provide: 'AIService',
+			useClass: AIService,
 		},
 	],
 	exports: [

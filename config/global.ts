@@ -4,4 +4,5 @@ export default registerAs('global', () => ({
 	DATABASE_URL:
     process.env.DATABASE_URL ||
     'postgresql://user_admin:password123@localhost:5432/reporting_db?schema=public',
+    GOOGLE_API_KEY: process.env.GOOGLE_API_KEY || 'AIzaSyD-EXAMPLE-KEY',
 }));
