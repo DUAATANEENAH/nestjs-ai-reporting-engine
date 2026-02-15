@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ReportModule } from './module/reports/reports.module';
+import { ReportModule } from './models/reports/reports.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import globalConfig from '../config/global';
 import { BullModule } from '@nestjs/bullmq';
