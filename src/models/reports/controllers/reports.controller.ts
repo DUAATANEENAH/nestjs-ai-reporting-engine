@@ -19,9 +19,9 @@ import {
 } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { ValidationPipe } from '@common';
-import { ReportTypes } from '../enum';
-import { UploadedFileValidation } from '../validation-schema/uploadFileValidation';
-import { ReportsService } from '../services';
+import { ReportsService } from '@reportsServices';
+import { ReportTypes } from '@reportsEnums';
+import { UploadedFileValidation } from '@reportsValidationSchema';
 
 @ApiTags('reports')
 @Controller('reports')

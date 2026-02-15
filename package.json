@@ -83,15 +83,69 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "rootDir": ".",
+    "testRegex": "test/.*\\.spec\\.ts$",
+    "moduleNameMapper": {
+      "^@providers$": "<rootDir>/src/providers",
+      "^@providers/(.*)$": "<rootDir>/src/providers/$1",
+      "^@common$": "<rootDir>/src/common",
+      "^@common/(.*)$": "<rootDir>/src/common/$1",
+      "^@reportsModels$": "<rootDir>/src/models/reports",
+      "^@reportsModels/(.*)$": "<rootDir>/src/models/reports/$1",
+      "^@src/(.*)$": "<rootDir>/src/$1",
+      "^@config/(.*)$": "<rootDir>/config/$1",
+
+
+      "^@reportsControllers/(.*)$": ["<rootDir>/src/models/reports/controllers/$1"],
+      "^@reportsControllers$": ["<rootDir>/src/models/reports/controllers"],
+
+      "^@reportsEnums/(.*)$": ["<rootDir>/src/models/reports/enum/$1"],
+      "^@reportsEnums$": ["<rootDir>/src/models/reports/enum"],
+
+      "^@reportsProcessors/(.*)$": ["<rootDir>/src/models/reports/processors/$1"],
+      "^@reportsProcessors$": ["<rootDir>/src/models/reports/processors"],
+
+      "^@reportsUtils/(.*)$": ["<rootDir>/src/models/reports/utils/$1"],
+      "^@reportsUtils$": ["<rootDir>/src/models/reports/utils"],
+
+      "^@reportsValidationSchema/(.*)$": [
+        "<rootDir>/src/models/reports/validation-schema/$1"
+      ],
+      "^@reportsValidationSchema$": ["<rootDir>/src/models/reports/validation-schema"],
+
+      "^@reportsNotification/(.*)$": ["<rootDir>/src/models/reports/notification/$1"],
+      "^@reportsNotification$": ["<rootDir>/src/models/reports/notification"],
+
+      "^@reportsServices/(.*)$": ["<rootDir>/src/models/reports/services/$1"],
+      "^@reportsServices$": ["<rootDir>/src/models/reports/services"]
+    },
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "src/**/*.ts",
+      "config/**/*.ts",
+      "prisma/**/*.ts",
+      "!src/**/*.spec.ts",
+      "!src/models/reports/processors/**",
+      "!src/models/reports/controllers/reports.controller.ts",
+      "!src/models/reports/notification/reports.gateway.ts"
     ],
-    "coverageDirectory": "../coverage",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/",
+      "/coverage/",
+      "/test/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    },
+    "coverageDirectory": "coverage",
     "testEnvironment": "node"
   }
 }

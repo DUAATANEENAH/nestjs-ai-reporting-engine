@@ -1,9 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { ReportJobNames, ReportQueueNameDefault, ReportTypes } from '../enum';
+import { ReportJobNames, ReportQueueNameDefault, ReportTypes, ReportStatus } from '@reportsEnums';
 import { IPrismaService } from '@providers';
-import { ReportStatus } from '../enum/reportStatus.enum';
 
 const REPORTING_QUEUE = `{${
 	process.env.REPORTING_QUEUE || ReportQueueNameDefault.REPORTING_QUEUE

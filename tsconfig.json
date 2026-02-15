@@ -17,13 +17,41 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-   "paths": {
-    "@providers/*": ["src/providers/*"],
-    "@providers": ["src/providers"], 
-    "@reports/*": ["src/modules/reports/*"],
-    "@reports": ["src/modules/reports"],
-    "@common/*": ["src/common/*"],
-    "@common": ["src/common"]
+    "paths": {
+      "@providers/*": ["./src/providers/*"],
+      "@providers": ["./src/providers"],
+      "@src/*": ["./src/*"],
+      "@config/*": ["./config/*"],
+      "@config": ["./config/*"],
+
+      "@reportsModels/*": ["./src/models/reports/*"],
+      "@reportsModels": ["./src/models/reports"],
+
+      "@reportsControllers/*": ["./src/models/reports/controllers/*"],
+      "@reportsControllers": ["./src/models/reports/controllers"],
+
+      "@reportsEnums/*": ["./src/models/reports/enum/*"],
+      "@reportsEnums": ["./src/models/reports/enum"],
+
+      "@reportsProcessors/*": ["./src/models/reports/processors/*"],
+      "@reportsProcessors": ["./src/models/reports/processors"],
+
+      "@reportsUtils/*": ["./src/models/reports/utils/*"],
+      "@reportsUtils": ["./src/models/reports/utils"],
+
+      "@reportsValidationSchema/*": [
+        "./src/models/reports/validation-schema/*"
+      ],
+      "@reportsValidationSchema": ["./src/models/reports/validation-schema"],
+
+      "@reportsNotification/*": ["./src/models/reports/notification/*"],
+      "@reportsNotification": ["./src/models/reports/notification"],
+
+      "@reportsServices/*": ["./src/models/reports/services/*"],
+      "@reportsServices": ["./src/models/reports/services"],
+
+      "@common/*": ["./src/common/*"],
+      "@common": ["./src/common"]
     }
   },
   "exclude": ["node_modules", "dist"]

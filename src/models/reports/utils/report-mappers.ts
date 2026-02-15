@@ -1,4 +1,4 @@
-import { ReportTypes } from '../enum';
+import { ReportTypes } from '@reportsEnums';
 
 export const ReportMappers: Record<ReportTypes | 'DEFAULT', (row: any) => any> =
   {

@@ -3,3 +3,4 @@ dist/*
 **/*.spec.ts
 **/test/**
 config/*
+coverage/
