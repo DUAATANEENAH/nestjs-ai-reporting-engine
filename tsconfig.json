@@ -50,6 +50,10 @@
       "@reportsServices/*": ["./src/models/reports/services/*"],
       "@reportsServices": ["./src/models/reports/services"],
 
+
+      "@entities/*": ["./src/providers/entities/*"],
+      "@entities": ["./src/providers/entities"],
+
       "@common/*": ["./src/common/*"],
       "@common": ["./src/common"]
     }

@@ -117,7 +117,10 @@
       "^@reportsNotification$": ["<rootDir>/src/models/reports/notification"],
 
       "^@reportsServices/(.*)$": ["<rootDir>/src/models/reports/services/$1"],
-      "^@reportsServices$": ["<rootDir>/src/models/reports/services"]
+      "^@reportsServices$": ["<rootDir>/src/models/reports/services"],
+
+      "^@entities/(.*)$": "<rootDir>/src/providers/entities/$1",
+      "^@entities$": "<rootDir>/src/providers/entities"
     },
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"

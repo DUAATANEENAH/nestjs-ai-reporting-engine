@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
+import { IReport, IReportData } from '@entities';
+import { ReportStatus, ReportTypes } from '@reportsEnums';
 
 export interface IPrismaService {
 	addReport(report: { fileName: string; filePath: string; status: string }): Promise<any>;
@@ -40,31 +42,31 @@ export class PrismaService extends PrismaClient implements IPrismaService, OnMod
 		await this.$disconnect();
 	}
 
-	public async addReport(report: { fileName: string; filePath: string; status: string }) {
+	public async addReport(report: IReport): Promise<any> {
 		return await this.report.create({
 			data: report,
 		});
 	}
 
-	public async updateReport(reportId: string, updateData: any): Promise<any> {
+	public async updateReport(reportId: string, updateData: Record<string, any>): Promise<any> {
 		return await this.report.update({
 			where: { id: reportId },
 			data: { ...updateData },
 		});
 	}
 
-	public async updateReportIdStatus(reportId: string, status: string) {
+	public async updateReportIdStatus(reportId: string, status: ReportStatus): Promise<any> {
 		return await this.report.update({
 			where: { id: reportId },
 			data: { status },
 		});
 	}
 
-	public async createReportData(data: any[]): Promise<any> {
+	public async createReportData(data: IReportData[]): Promise<any> {
 		return await this.reportData.createMany({ data });
 	}
 
-	public async getReadySample(reportId: string): Promise<{ dataType: string; sample: any[] }> {
+	public async getReadySample(reportId: string): Promise<{ dataType: ReportTypes; sample: any[] }> {
 		const rawRows = await this.reportData.findMany({
 			where: { reportId },
 			take: 10,
@@ -74,7 +76,7 @@ export class PrismaService extends PrismaClient implements IPrismaService, OnMod
 			},
 		});
 		return {
-			dataType: rawRows[0]?.type || 'UNKNOWN',
+			dataType: (rawRows[0]?.type || 'UNKNOWN') as ReportTypes,
 			sample: rawRows.map(row => row.content),
 		};
 	}
