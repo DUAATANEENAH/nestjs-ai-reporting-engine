@@ -22,6 +22,7 @@
       "@providers": ["./src/providers"],
       "@src/*": ["./src/*"],
       "@config/*": ["./config/*"],
+      "@config": ["./config/*"],
 
       "@reportsModels/*": ["./src/models/reports/*"],
       "@reportsModels": ["./src/models/reports"],

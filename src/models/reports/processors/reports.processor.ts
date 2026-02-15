@@ -2,13 +2,13 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Inject, Logger } from '@nestjs/common';
 import { PrismaService } from '@providers';
 import { Job } from 'bullmq';
-import { ReportJobNames, ReportQueueNameDefault } from '../enum';
-import { ReportStatus } from '../enum';
+import { ReportJobNames, ReportQueueNameDefault } from '@reportsEnums';
+import { ReportStatus } from '@reportsEnums';
 import * as csvParser from 'csv-parser';
-import { ReportMappers } from '../utils';
+import { ReportMappers } from '@reportsUtils';
 import * as fs from 'fs';
-import { ReportsGateway } from '../notification';
-import { IAIService } from '../services';
+import { ReportsGateway } from '@reportsNotification';
+import { IAIService } from '@reportsServices';
 
 export interface IReportsProcessor {
 	process(job: Job<any, any, string>): Promise<any>;

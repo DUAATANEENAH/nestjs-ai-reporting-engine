@@ -2,12 +2,12 @@ import { BullModule } from '@nestjs/bullmq';
 import { ReportsController } from './controllers';
 import { AIService, ReportsService } from './services';
 import { Module } from '@nestjs/common';
-import { ReportQueueNameDefault } from './enum';
+import { ReportQueueNameDefault } from '@reportsEnums';
 import { PrismaService } from '@providers';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import globalConfig from '../../../config/global';
-import { ReportsProcessor } from './processors';
-import { ReportsGateway } from './notification';
+import globalConfig from '@config/global';
+import { ReportsProcessor } from '@reportsProcessors';
+import { ReportsGateway } from '@reportsNotification';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
